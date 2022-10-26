@@ -170,14 +170,18 @@ defmodule LiveAdmin.Components.Container do
   end
 
   def render("list.html", assigns) do
-    mod =
-      assigns.resource.config
-      |> get_config(:components, [])
-      |> Keyword.get(:list, Index)
+    assigns =
+      assigns
+      |> assign(
+        :mod,
+        assigns.resource.config
+        |> get_config(:components, [])
+        |> Keyword.get(:list, Index)
+      )
 
     ~H"""
     <.live_component
-      module={mod}
+      module={@mod}
       id="list"
       socket={@socket}
       resources={@resources}
@@ -192,14 +196,18 @@ defmodule LiveAdmin.Components.Container do
   end
 
   def render("new.html", assigns) do
-    mod =
-      assigns.resource.config
-      |> get_config(:components, [])
-      |> Keyword.get(:new, Form)
+    assigns =
+      assigns
+      |> assign(
+        :mod,
+        assigns.resource.config
+        |> get_config(:components, [])
+        |> Keyword.get(:new, Form)
+      )
 
     ~H"""
     <.live_component
-      module={mod}
+      module={@mod}
       id="form"
       action="create"
       session_id={@session_id}
@@ -210,14 +218,18 @@ defmodule LiveAdmin.Components.Container do
   end
 
   def render("edit.html", assigns) do
-    mod =
-      assigns.resource.config
-      |> get_config(:components, [])
-      |> Keyword.get(:edit, Form)
+    assigns =
+      assigns
+      |> assign(
+        :mod,
+        assigns.resource.config
+        |> get_config(:components, [])
+        |> Keyword.get(:edit, Form)
+      )
 
     ~H"""
     <.live_component
-      module={mod}
+      module={@mod}
       id="form"
       action="update"
       session_id={@session_id}

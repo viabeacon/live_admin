@@ -2,7 +2,6 @@ defmodule LiveAdmin.Components.Container.Form do
   use Phoenix.LiveComponent
   use Phoenix.HTML
 
-  import Phoenix.LiveView.Helpers
   import LiveAdmin.ErrorHelpers
   import LiveAdmin, only: [associated_resource: 3, get_config: 3, get_resource: 1]
   import LiveAdmin.Components.Container, only: [route_with_params: 2]
@@ -54,12 +53,12 @@ defmodule LiveAdmin.Components.Container.Form do
     ~H"""
     <div>
       <.form
-        let={f}
+        :let={f}
         for={@changeset}
-        as="params"
-        phx_change="validate"
-        phx_submit={@action}
-        phx_target={@myself}
+        as={:params}
+        phx-change="validate"
+        phx-submit={@action}
+        phx-target={@myself}
         class="resource__form"
       >
         <%= for {field, type, opts} <- Resource.fields(@resource) do %>
