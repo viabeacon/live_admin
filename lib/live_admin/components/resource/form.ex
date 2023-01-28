@@ -17,6 +17,7 @@ defmodule LiveAdmin.Components.Container.Form do
     :naive_datetime,
     :utc_datetime,
     :id,
+    :binary_id,
     :float
   ]
 
@@ -90,13 +91,7 @@ defmodule LiveAdmin.Components.Container.Form do
         %{"field" => field, "value" => value},
         socket = %{assigns: %{resource: resource, changeset: changeset, session_id: session_id}}
       ) do
-    changeset =
-      validate(
-        resource,
-        changeset,
-        Map.put(changeset.changes, String.to_existing_atom(field), value),
-        session_id
-      )
+    changeset = validate(resource, changeset, Map.put(changeset.params, field, value), session_id)
 
     {:noreply,
      assign(socket,
@@ -221,7 +216,7 @@ defmodule LiveAdmin.Components.Container.Form do
     """
   end
 
-  defp input(assigns = %{type: :id}) do
+  defp input(assigns = %{type: id}) when id in [:id, :binary_id] do
     assigns.resource.schema
     |> associated_resource(assigns.field, assigns.resources)
     |> case do
@@ -230,7 +225,7 @@ defmodule LiveAdmin.Components.Container.Form do
         <%= textarea(@form, @field, rows: 1, class: "field__text", disabled: @disabled) %>
         """
 
-      {_, resource} ->
+      resource ->
         ~H"""
         <%= unless @form.data |> Ecto.primary_key() |> Keyword.keys() |> Enum.member?(@field) do %>
           <.live_component

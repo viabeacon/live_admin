@@ -1,5 +1,5 @@
 create table users (
-  id serial,
+  id uuid,
   name varchar(100),
   email varchar(100),
   birth_date date,
@@ -11,7 +11,6 @@ create table users (
   encrypted_password text,
   status varchar(100),
   other_resource_id int,
-  tags jsonb,
   roles character varying[] DEFAULT '{}'::character varying[],
   rating real
 );
@@ -20,17 +19,19 @@ CREATE UNIQUE INDEX users_email_index ON users USING btree (email);
 
 create table posts (
   id serial,
-  user_id int,
-  disabled_user_id int,
+  user_id uuid,
+  disabled_user_id uuid,
   title text NOT NULL,
   body text,
-  inserted_at timestamp without time zone
+  inserted_at timestamp without time zone,
+  tags jsonb,
+  previous_version jsonb DEFAULT '{}'::jsonb NOT NULL
 );
 
 create schema alt;
 
 create table alt.users (
-  id serial,
+  id uuid,
   name varchar(100),
   email varchar(100),
   birth_date date,
@@ -42,17 +43,19 @@ create table alt.users (
   encrypted_password text,
   status varchar(100),
   other_resource_id int,
-  tags jsonb,
-  roles character varying[] DEFAULT '{}'::character varying[]
+  roles character varying[] DEFAULT '{}'::character varying[],
+  rating real
 );
 
 CREATE UNIQUE INDEX users_email_index ON alt.users USING btree (email);
 
 create table alt.posts (
   id serial,
-  user_id int,
-  disabled_user_id int,
+  user_id uuid,
+  disabled_user_id uuid,
   title text NOT NULL,
   body text,
-  inserted_at timestamp without time zone
+  inserted_at timestamp without time zone,
+  tags jsonb,
+  previous_version jsonb DEFAULT '{}'::jsonb NOT NULL
 );
